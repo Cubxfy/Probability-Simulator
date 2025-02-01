@@ -21,7 +21,8 @@ class Buttons(discord.ui.View):
             CREATE TABLE IF NOT EXISTS highlow (
                 highest_streak INTEGER,
                 guild_id INTEGER,
-                user_id INTEGER UNIQUE
+                user_id INTEGER,
+                UNIQUE(guild_id, user_id)
             )
         ''')
         self.conn.commit()
@@ -82,11 +83,16 @@ class Buttons(discord.ui.View):
     async def button_end(self, interaction: discord.Interaction, button: discord.ui.Button):
         print("Close Button Clicked")
         
-        self.cursor.execute(
-            "INSERT INTO highlow (highest_streak, guild_id, user_id) VALUES (?, ?, ?) "
-            "ON CONFLICT(user_id) DO UPDATE SET highest_streak = MAX(highest_streak, excluded.highest_streak)",
-            (self.highest, self.guild_id, self.user_id)
-        )
+        self.cursor.execute('''
+            INSERT INTO highlow (highest_streak, guild_id, user_id)
+            VALUES (?, ?, ?)
+            ON CONFLICT(guild_id, user_id) 
+            DO UPDATE SET highest_streak = CASE 
+                WHEN excluded.highest_streak > highlow.highest_streak 
+                THEN excluded.highest_streak 
+                ELSE highlow.highest_streak 
+            END
+        ''', (self.highest, self.guild_id, self.user_id))
         
         self.conn.commit()
         self.conn.close()
