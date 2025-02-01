@@ -6,9 +6,8 @@ import sqlite3
 bot = commands.Bot(command_prefix='!', intents=discord.Intents.all())
 
 class Buttons(discord.ui.View):
-    def __init__(self, user_id: int, guild_id: int, author):
+    def __init__(self, user_id: int, guild_id: int):
         super().__init__()
-        self.author = author
         self.user_id = user_id
         self.guild_id = guild_id
         self.random_number = random.randint(1, 100)
