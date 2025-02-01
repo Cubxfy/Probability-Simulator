@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 import random
+import sqlite3
 
 bot = commands.Bot(command_prefix='!', intents=discord.Intents.all())
 
@@ -10,6 +11,18 @@ class Buttons(discord.ui.View):
         self.random_number = random.randint(1, 100)
         self.count = 0
         self.highest = 0
+        self.conn = sqlite3.connect("gambling.db")
+        self.cursor = self.conn.cursor
+        
+        self.cursor.execute('''
+            CREATE TABLE IF NOT EXISTS highlow (
+                highest_streak INTEGER,
+                guild_id INTEGER,
+                user_id INTEGER,
+            )
+        ''')
+        
+        self.conn.commit
     
     async def update_embed(self, interaction: discord.Interaction, result: str):
         if self.count > self.highest:
@@ -77,6 +90,9 @@ class highlowCog(commands.Cog):
         view = Buttons()
         embed = discord.Embed(title= f"Starting number: {view.random_number}", description="**HighLow**\nPredict whether the next number will be higher or lower", color=discord.Color.green())
         await ctx.send(embed=embed, view=view)
+
+    def cog_unload(self):
+        self.conn.close()
 
 async def setup(bot):
     await bot.add_cog(highlowCog(bot))
