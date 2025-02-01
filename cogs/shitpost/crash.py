@@ -36,11 +36,12 @@ class Buttons(discord.ui.View):
         if self.count > self.highest:
             self.highest = self.count  
 
-        color = discord.Color.green() if result == "Correct" else discord.Color.red()   
+        if result != "Correct":
+            color = discord.Color.red()   
 
         embed = discord.Embed(
             title= f"{result}\nNew Number: {self.random_number}",
-            description=(f"Current Score: {self.count}\nHighest Score: {self.highest}"),
+            description=(f"Current Score: {self.count}"),
             color=color
         )
 
@@ -54,7 +55,7 @@ class Buttons(discord.ui.View):
         if new_number == self.random_number:
             result = "Lose"
         else:
-            self.count = 0
+            self.count += 0
         await self.update_embed(interaction, result)
 
     #Close Button
@@ -91,7 +92,7 @@ class crashCog(commands.Cog):
         
         highest_score = view.highest
         
-        embed = discord.Embed(title= f"Multiplier: {view.random_number}", description=f"**Crash**\nGet out before the ship explodes\nHighest Score: {highest_score}", color=discord.Color.green())
+        embed = discord.Embed(title= f"Multiplier: {view.count}", description=f"**Crash**\nGet out before the ship explodes\nHighest Score: {highest_score}", color=discord.Color.green())
         await ctx.send(embed=embed, view=view)
 
     def cog_unload(self):
