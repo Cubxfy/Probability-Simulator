@@ -22,7 +22,6 @@ class Buttons(discord.ui.View):
                 highest_streak INTEGER,
                 guild_id INTEGER,
                 user_id INTEGER
-                UNIQUE(guild_id, user_id)
             )
         ''')
         self.conn.commit()
