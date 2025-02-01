@@ -75,7 +75,7 @@ class highlowCog(commands.Cog):
     @commands.hybrid_command(aliases=["hl"])
     async def highlow(self, ctx):
         view = Buttons()
-        embed = discord.Embed(title= f"Starting number: {view.random_number}", description="**HighLow Game**\nPredict whether the next number will be higher or lower", color=discord.Color.green())
+        embed = discord.Embed(title= f"Starting number: {view.random_number}", description="**HighLow**\nPredict whether the next number will be higher or lower", color=discord.Color.green())
         await ctx.send(embed=embed, view=view)
 
 async def setup(bot):
