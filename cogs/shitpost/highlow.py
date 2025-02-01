@@ -5,8 +5,9 @@ import random
 bot = commands.Bot(command_prefix='!', intents=discord.Intents.all())
 
 class Buttons(discord.ui.View):
-    def __init__(self):
+    def __init__(self, author:discord.User):
         super().__init__()
+        self.owner = author
         self.random_number = random.randint(1, 100)
         self.count = 0
         self.highest = 0
@@ -31,6 +32,16 @@ class Buttons(discord.ui.View):
 
         await interaction.response.edit_message(embed=embed, view=self)
 
+    async def user_check(self, interaction:discord.Interaction):
+        if interaction.user.id != self.owner.id:
+            await interaction.response.send_message(
+                "this is not your game",
+                ephemeral=True
+            )
+            return False
+        
+        return True
+    
     @discord.ui.button(label="Higher", style=discord.ButtonStyle.grey)
     async def button_higher(self, interaction: discord.Interaction, button: discord.ui.Button):
         print("Higher Button Clicked")
