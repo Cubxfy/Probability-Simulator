@@ -10,6 +10,23 @@ class Buttons(discord.ui.View):
         self.random_number = random.randint(1, 100)
         self.count = 0
         self.highest = 0
+    
+    async def update_embed(self, interaction: discord.Interaction, result: str):
+        """ Updates the embed with the new result and sends an edited message. """
+        if self.count > self.highest:
+            self.highest = self.count  # Update highest score if beaten
+
+        embed = discord.Embed(
+            title="Highlow Game",
+            description=(
+                f"**{result}**\n"
+                f"Current Streak: {self.count}\n"
+                f"New Number: {self.random_number}\n"
+                f"Highest Score: {self.highest}"
+            ),
+            color=discord.Color.blue()
+        )
+        await interaction.response.edit_message(embed=embed, view=self)
 
     @discord.ui.button(label="Higher", style=discord.ButtonStyle.grey)
     async def button_higher(self, interaction: discord.Interaction, button: discord.ui.Button):
@@ -24,10 +41,7 @@ class Buttons(discord.ui.View):
                 self.count == self.highest
             self.count = 0
         self.random_number = new_number
-        await interaction.response.edit_message(
-            content=f"{result}\nCurrent Streak: {self.count}\nNew number: {self.random_number}",
-            view=self
-        )
+        await self.update_embed(interaction, result)
 
     @discord.ui.button(label="Lower", style=discord.ButtonStyle.grey)
     async def button_lower(self, interaction: discord.Interaction, button: discord.ui.Button):
@@ -42,10 +56,7 @@ class Buttons(discord.ui.View):
                 self.count == self.highest 
             self.count = 0
         self.random_number = new_number
-        await interaction.response.edit_message(
-            content=f"{result}\nCurrent Streak: {self.count}\nNew number: {self.random_number}",
-            view=self
-        )
+        await self.update_embed(interaction, result)
 
     @discord.ui.button(label="Close", style=discord.ButtonStyle.grey)
     async def button_end(self, interaction: discord.Interaction, button: discord.ui.Button):
