@@ -16,8 +16,8 @@ class Buttons(discord.ui.View):
             self.highest = self.count  
 
         embed = discord.Embed(
-            title="Highlow Game",
-            description=(f"**{result}**\nCurrent Streak: {self.count}\nNew Number: {self.random_number}\nHighest Score: {self.highest}"),
+            title= {result},
+            description=(f"Number: {self.random_number}\nCurrent Streak: {self.count}\nHighest Score: {self.highest}"),
             color=discord.Color.yellow()
         )
 
