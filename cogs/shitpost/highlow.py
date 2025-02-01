@@ -63,9 +63,6 @@ class Buttons(discord.ui.View):
         self.random_number = new_number
         await self.update_embed(interaction, result)
 
-    async def interaction_check(self, interaction: discord.Interaction):
-        return interaction.user.id == self.author.id
-    
     #Lower Button
     @discord.ui.button(label="Lower", style=discord.ButtonStyle.grey)
     async def button_lower(self, interaction: discord.Interaction, button: discord.ui.Button):
@@ -80,11 +77,7 @@ class Buttons(discord.ui.View):
                 self.highest = self.count 
             self.count = 0
         self.random_number = new_number
-        await self.update_embed(interaction, result)
-
-    async def interaction_check(self, interaction: discord.Interaction):
-        return interaction.user.id == self.author.id
-    
+        await self.update_embed(interaction, result)    
     
     #Close Button
     @discord.ui.button(label="Close", style=discord.ButtonStyle.grey)
@@ -106,11 +99,7 @@ class Buttons(discord.ui.View):
         self.conn.close()
         
         embed = discord.Embed(title="**Game Ended**", description=f"Highest Score: {self.highest}", color=discord.Color.red())
-        await interaction.response.edit_message(embed=embed, view=None)
-
-    async def interaction_check(self, interaction: discord.Interaction):
-        return interaction.user.id == self.author.id
-    
+        await interaction.response.edit_message(embed=embed, view=None)    
 
 class highlowCog(commands.Cog):
     def __init__(self, bot):
