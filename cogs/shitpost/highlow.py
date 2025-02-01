@@ -31,16 +31,6 @@ class Buttons(discord.ui.View):
             )
 
         await interaction.response.edit_message(embed=embed, view=self)
-
-    async def user_check(self, interaction:discord.Interaction):
-        if interaction.user.id != self.owner.id:
-            await interaction.response.send_message(
-                "this is not your game",
-                ephemeral=True
-            )
-            return False
-        else:
-            return True
     
     @discord.ui.button(label="Higher", style=discord.ButtonStyle.grey)
     async def button_higher(self, interaction: discord.Interaction, button: discord.ui.Button):
