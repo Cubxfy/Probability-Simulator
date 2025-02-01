@@ -20,7 +20,7 @@ class Buttons(discord.ui.View):
         self.cursor.execute('''
             CREATE TABLE IF NOT EXISTS highlow (
                 highest_streak INTEGER,
-                guild_id INTEGER,
+                guild_id INTEGER UNIQUE,
                 user_id INTEGER UNIQUE
             )
         ''')
