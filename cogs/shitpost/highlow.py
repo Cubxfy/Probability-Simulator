@@ -21,7 +21,7 @@ class Buttons(discord.ui.View):
             CREATE TABLE IF NOT EXISTS highlow (
                 highest_streak INTEGER,
                 guild_id INTEGER,
-                user_id INTEGER
+                user_id INTEGER UNIQUE
             )
         ''')
         self.conn.commit()
