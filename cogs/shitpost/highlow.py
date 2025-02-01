@@ -6,9 +6,10 @@ import sqlite3
 bot = commands.Bot(command_prefix='!', intents=discord.Intents.all())
 
 class Buttons(discord.ui.View):
-    def __init__(self, user_id: int):
+    def __init__(self, user_id: int, guild_id: int):
         super().__init__()
         self.user_id = user_id
+        self.guild_id = guild_id
         self.random_number = random.randint(1, 100)
         self.count = 0      
         
@@ -19,12 +20,13 @@ class Buttons(discord.ui.View):
         self.cursor.execute('''
             CREATE TABLE IF NOT EXISTS highlow (
                 highest_streak INTEGER,
+                guild_id INTEGER,
                 user_id INTEGER
             )
         ''')
         self.conn.commit()
         
-        self.cursor.execute("SELECT highest_streak FROM highlow WHERE user_id = ?", (self.user_id))
+        self.cursor.execute("SELECT highest_streak FROM highlow WHERE user_id = ? AND guild_id = ?", (self.user_id, self.guild_id))
         row = self.cursor.fetchone()
         self.highest = row[0] if row else 0
 
@@ -81,9 +83,9 @@ class Buttons(discord.ui.View):
         print("Close Button Clicked")
         
         self.cursor.execute(
-            "INSERT INTO highlow (highest_streak, user_id) VALUES (?, ?, ?) "
+            "INSERT INTO highlow (highest_streak, guild_id, user_id) VALUES (?, ?, ?) "
             "ON CONFLICT(user_id) DO UPDATE SET highest_streak = MAX(highest_streak, excluded.highest_streak)",
-            (self.highest, self.user_id)
+            (self.highest, self.guild_id, self.user_id)
         )
         
         self.conn.commit()
@@ -101,7 +103,7 @@ class highlowCog(commands.Cog):
 
     @commands.hybrid_command(aliases=["hl"])
     async def highlow(self, ctx):
-        view = Buttons(ctx.author.id)
+        view = Buttons(ctx.author.id, ctx.guild.id)
         
         highest_score = view.highest
         
