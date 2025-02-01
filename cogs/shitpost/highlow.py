@@ -39,8 +39,8 @@ class Buttons(discord.ui.View):
                 ephemeral=True
             )
             return False
-        
-        return True
+        else:
+            return True
     
     @discord.ui.button(label="Higher", style=discord.ButtonStyle.grey)
     async def button_higher(self, interaction: discord.Interaction, button: discord.ui.Button):
