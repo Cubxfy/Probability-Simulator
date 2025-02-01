@@ -14,7 +14,7 @@ class Buttons(discord.ui.View):
         self.count = 0      
         
         #DB initialisation
-        self.conn = sqlite3.connect("gambling.db")
+        self.conn = sqlite3.connect("highlow.db")
         self.cursor = self.conn.cursor()
         
         self.cursor.execute('''
@@ -103,7 +103,7 @@ class Buttons(discord.ui.View):
 class highlowCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.conn = sqlite3.connect("gambling.db")
+        self.conn = sqlite3.connect("highlow.db")
         self.cursor = self.conn.cursor()
 
     @commands.hybrid_command(aliases=["hl"])
