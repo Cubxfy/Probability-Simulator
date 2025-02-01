@@ -17,14 +17,10 @@ class Buttons(discord.ui.View):
 
         embed = discord.Embed(
             title="Highlow Game",
-            description=(
-                f"**{result}**\n"
-                f"Current Streak: {self.count}\n"
-                f"New Number: {self.random_number}\n"
-                f"Highest Score: {self.highest}"
-            ),
-            color=discord.Color.blue()
+            description=(f"**{result}**\nCurrent Streak: {self.count}\nNew Number: {self.random_number}\nHighest Score: {self.highest}"),
+            color=discord.Color.yellow()
         )
+
         await interaction.response.edit_message(embed=embed, view=self)
 
     @discord.ui.button(label="Higher", style=discord.ButtonStyle.grey)
