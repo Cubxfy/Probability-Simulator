@@ -84,7 +84,7 @@ class Buttons(discord.ui.View):
         
         self.cursor.execute(
             "INSERT INTO highlow (highest_streak, guild_id, user_id) VALUES (?, ?, ?) "
-            "ON CONFLICT(user_id) DO UPDATE SET highest_streak = MAX(highest_streak, excluded.highest_streak)",
+            "ON CONFLICT(user_id, guild_id) DO UPDATE SET highest_streak = MAX(highest_streak, excluded.highest_streak)",
             (self.highest, self.guild_id, self.user_id)
         )
         
