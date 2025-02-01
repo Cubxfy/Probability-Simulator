@@ -10,9 +10,9 @@ class Buttons(discord.ui.View):
         super().__init__()
         self.random_number = random.randint(1, 100)
         self.count = 0
-        self.highest = 0
+        self.highest = self.cursor.fetchone()
         self.conn = sqlite3.connect("gambling.db")
-        self.cursor = self.conn.cursor
+        self.cursor = self.conn.cursor()
         
         self.cursor.execute('''
             CREATE TABLE IF NOT EXISTS highlow (
@@ -78,6 +78,7 @@ class Buttons(discord.ui.View):
     async def button_end(self, interaction: discord.Interaction, button: discord.ui.Button):
         print("Close Button Clicked")
         embed = discord.Embed(title="**Game Ended**", description=f"Highest Score: {self.highest}", color=discord.Color.red())
+        self.cursor.execute(f"INSERT INTO gambling VALUES, ({self.highest}, guild.id, member.id)")
         await interaction.response.edit_message(embed=embed, view=None)
 
 
