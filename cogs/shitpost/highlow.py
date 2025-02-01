@@ -67,7 +67,7 @@ class highlowCog(commands.Cog):
     @commands.hybrid_command(aliases=["hl"])
     async def highlow(self, ctx):
         view = Buttons()
-        embed = discord.Embed(title= "Highlow Game", description = f"Starting number: {view.random_number}\nHighest Score: {view.highest}", color=discord.Color.green)
+        embed = discord.Embed(title= "Highlow Game", description = f"Starting number: {view.random_number}\nHighest Score: {view.highest}", color=00000)
         await ctx.send(embed=embed, view=view)
 
 async def setup(bot):
