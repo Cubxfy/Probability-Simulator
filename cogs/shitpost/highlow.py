@@ -12,9 +12,8 @@ class Buttons(discord.ui.View):
         self.highest = 0
     
     async def update_embed(self, interaction: discord.Interaction, result: str):
-        """ Updates the embed with the new result and sends an edited message. """
         if self.count > self.highest:
-            self.highest = self.count  # Update highest score if beaten
+            self.highest = self.count  
 
         embed = discord.Embed(
             title="Highlow Game",
@@ -61,7 +60,14 @@ class Buttons(discord.ui.View):
     @discord.ui.button(label="Close", style=discord.ButtonStyle.grey)
     async def button_end(self, interaction: discord.Interaction, button: discord.ui.Button):
         print("Close Button Clicked")
-        await interaction.response.edit_message(content="**Game ended.**", view=None)
+        
+        embed = discord.Embed(
+            title = "Highlow Game"
+            description = f"Game Ended\nHighest Score: {self.highest}"
+            color = discord.Color.Blue()
+        )
+       
+        await self.update_embed(embed=embed)
 
 class highlowCog(commands.Cog):
     def __init__(self, bot):
