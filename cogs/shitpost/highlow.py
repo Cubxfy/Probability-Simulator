@@ -6,11 +6,13 @@ import sqlite3
 bot = commands.Bot(command_prefix='!', intents=discord.Intents.all())
 
 class Buttons(discord.ui.View):
-    def __init__(self):
+    def __init__(self, user_id: int, guild_id: int):
         super().__init__()
+        self.user_id = user_id
+        self.guild_id = guild_id
         self.random_number = random.randint(1, 100)
-        self.count = 0
-        self.highest = self.cursor.fetchone()
+        self.count = 0      
+        
         self.conn = sqlite3.connect("gambling.db")
         self.cursor = self.conn.cursor()
         
@@ -21,26 +23,24 @@ class Buttons(discord.ui.View):
                 user_id INTEGER,
             )
         ''')
+        self.conn.commit()
         
-        self.conn.commit
+        self.cursor.execute("SELECT highest_streak FROM highlow WHERE user_id = ? AND guild_id = ?", (self.user_id, self.guild_id))
+        row = self.cursor.fetchone()
+        self.highest = row[0] if row else 0
+
     
     async def update_embed(self, interaction: discord.Interaction, result: str):
         if self.count > self.highest:
             self.highest = self.count  
 
-        if result == "Correct":
-            embed = discord.Embed(
-                title= f"{result}\nNew Number: {self.random_number}",
-                description=(f"Current Streak: {self.count}\nHighest Score: {self.highest}"),
-                color=discord.Color.green()
-            )
-        
-        if result == "Incorrect":
-            embed = discord.Embed(
-                title= f"{result}\nNew Number: {self.random_number}",
-                description=(f"Current Streak: {self.count}\nHighest Score: {self.highest}"),
-                color=discord.Color.red()
-            )
+        color = discord.Color.green() if result == "Correct" else color = discord.Color.red()
+
+        embed = discord.Embed(
+            title= f"{result}\nNew Number: {self.random_number}",
+            description=(f"Current Streak: {self.count}\nHighest Score: {self.highest}"),
+            color=color
+        )
 
         await interaction.response.edit_message(embed=embed, view=self)
     
@@ -54,7 +54,7 @@ class Buttons(discord.ui.View):
         else:
             result = "Incorrect"
             if self.count >= self.highest:
-                self.count == self.highest
+                self.highest = self.count
             self.count = 0
         self.random_number = new_number
         await self.update_embed(interaction, result)
@@ -69,7 +69,7 @@ class Buttons(discord.ui.View):
         else:
             result = "Incorrect"
             if self.count >= self.highest:
-                self.count == self.highest 
+                self.highest = self.count 
             self.count = 0
         self.random_number = new_number
         await self.update_embed(interaction, result)
@@ -77,14 +77,25 @@ class Buttons(discord.ui.View):
     @discord.ui.button(label="Close", style=discord.ButtonStyle.grey)
     async def button_end(self, interaction: discord.Interaction, button: discord.ui.Button):
         print("Close Button Clicked")
+        
+        self.cursor.execute(
+            "INSERT INTO highlow (highest_streak, guild_id, user_id) VALUES (?, ?, ?) "
+            "ON CONFLICT(user_id) DO UPDATE SET highest_streak = MAX(highest_streak, excluded.highest_streak)",
+            (self.highest, self.guild_id, self.user_id)
+        )
+        
+        self.conn.commit()
+        self.conn.close()
+        
         embed = discord.Embed(title="**Game Ended**", description=f"Highest Score: {self.highest}", color=discord.Color.red())
-        self.cursor.execute(f"INSERT INTO gambling VALUES, ({self.highest}, guild.id, member.id)")
         await interaction.response.edit_message(embed=embed, view=None)
 
 
 class highlowCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.conn = sqlite3.connect("gambling.db")
+        self.cursor = self.conn.cursor()
 
     @commands.hybrid_command(aliases=["hl"])
     async def highlow(self, ctx):
