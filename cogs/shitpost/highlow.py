@@ -15,11 +15,19 @@ class Buttons(discord.ui.View):
         if self.count > self.highest:
             self.highest = self.count  
 
-        embed = discord.Embed(
-            title= f"{result}\n New Number: {self.random_number}",
-            description=(f"Current Streak: {self.count}\nHighest Score: {self.highest}"),
-            color=discord.Color.yellow()
-        )
+        if result == "Correct":
+            embed = discord.Embed(
+                title= f"{result}\nNew Number: {self.random_number}",
+                description=(f"Current Streak: {self.count}\nHighest Score: {self.highest}"),
+                color=discord.Color.green()
+            )
+        
+        if result == "Incorrect":
+            embed = discord.Embed(
+                title= f"{result}\nNew Number: {self.random_number}",
+                description=(f"Current Streak: {self.count}\nHighest Score: {self.highest}"),
+                color=discord.Color.red()
+            )
 
         await interaction.response.edit_message(embed=embed, view=self)
 
