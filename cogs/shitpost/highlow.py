@@ -60,7 +60,9 @@ class Buttons(discord.ui.View):
     @discord.ui.button(label="Close", style=discord.ButtonStyle.grey)
     async def button_end(self, interaction: discord.Interaction, button: discord.ui.Button):
         print("Close Button Clicked")
-        await interaction.response.edit_message(content="**Game ended.**", view=None)
+        embed = discord.Embed(title="**Game Ended**", description=f"Highest Score: {self.highest}", color=discord.Color.red())
+        await interaction.response.edit_message(embed=embed, view=None)
+
 
 class highlowCog(commands.Cog):
     def __init__(self, bot):
