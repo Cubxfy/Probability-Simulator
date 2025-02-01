@@ -16,8 +16,8 @@ class Buttons(discord.ui.View):
             self.highest = self.count  
 
         embed = discord.Embed(
-            title= f"{result}",
-            description=(f"Number: {self.random_number}\nCurrent Streak: {self.count}\nHighest Score: {self.highest}"),
+            title= f"{result}\n New Number: {self.random_number}",
+            description=(f"Current Streak: {self.count}\nHighest Score: {self.highest}"),
             color=discord.Color.yellow()
         )
 
@@ -67,7 +67,7 @@ class highlowCog(commands.Cog):
     @commands.hybrid_command(aliases=["hl"])
     async def highlow(self, ctx):
         view = Buttons()
-        embed = discord.Embed(title= "Highlow Game", description = f"Starting number: {view.random_number}\nHighest Score: {view.highest}", color=discord.Color.green())
+        embed = discord.Embed(title= f"Starting number: {view.random_number}", description="**HighLow Game**\nPredict whether the next number will be higher or lower", color=discord.Color.green())
         await ctx.send(embed=embed, view=view)
 
 async def setup(bot):
