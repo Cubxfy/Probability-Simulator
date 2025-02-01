@@ -22,11 +22,13 @@ class Buttons(discord.ui.View):
                 f"**{result}**\n"
                 f"Current Streak: {self.count}\n"
                 f"New Number: {self.random_number}\n"
-                f"Highest Score: {self.highest}"
+                f"Session Highest: {self.highest}"
             ),
-            color=discord.Color.blue()
+            color=discord.Color.black()
         )
         await interaction.response.edit_message(embed=embed, view=self)
+        
+        
 
     @discord.ui.button(label="Higher", style=discord.ButtonStyle.grey)
     async def button_higher(self, interaction: discord.Interaction, button: discord.ui.Button):
@@ -61,7 +63,7 @@ class Buttons(discord.ui.View):
     @discord.ui.button(label="Close", style=discord.ButtonStyle.grey)
     async def button_end(self, interaction: discord.Interaction, button: discord.ui.Button):
         print("Close Button Clicked")
-        await interaction.response.edit_message(content="**Game ended.**", view=None)
+        await self.update_embed(interaction)
 
 class highlowCog(commands.Cog):
     def __init__(self, bot):
