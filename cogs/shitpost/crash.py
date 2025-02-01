@@ -85,7 +85,7 @@ class crashCog(commands.Cog):
         self.conn = sqlite3.connect("crash.db")
         self.cursor = self.conn.cursor()
 
-    @commands.hybrid_command(aliases=["hl"])
+    @commands.hybrid_command()
     async def crash(self, ctx):
         view = Buttons(ctx.author.id, ctx.guild.id)
         
