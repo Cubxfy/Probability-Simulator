@@ -6,8 +6,9 @@ import sqlite3
 bot = commands.Bot(command_prefix='!', intents=discord.Intents.all())
 
 class Buttons(discord.ui.View):
-    def __init__(self, user_id: int, guild_id: int):
+    def __init__(self, user_id: int, guild_id: int, author):
         super().__init__()
+        self.author = author
         self.user_id = user_id
         self.guild_id = guild_id
         self.random_number = random.randint(1, 100)
@@ -62,6 +63,9 @@ class Buttons(discord.ui.View):
         self.random_number = new_number
         await self.update_embed(interaction, result)
 
+    async def interaction_check(self, interaction: discord.Interaction):
+        return interaction.user.id == self.author.id
+    
     #Lower Button
     @discord.ui.button(label="Lower", style=discord.ButtonStyle.grey)
     async def button_lower(self, interaction: discord.Interaction, button: discord.ui.Button):
@@ -78,6 +82,10 @@ class Buttons(discord.ui.View):
         self.random_number = new_number
         await self.update_embed(interaction, result)
 
+    async def interaction_check(self, interaction: discord.Interaction):
+        return interaction.user.id == self.author.id
+    
+    
     #Close Button
     @discord.ui.button(label="Close", style=discord.ButtonStyle.grey)
     async def button_end(self, interaction: discord.Interaction, button: discord.ui.Button):
@@ -100,6 +108,9 @@ class Buttons(discord.ui.View):
         embed = discord.Embed(title="**Game Ended**", description=f"Highest Score: {self.highest}", color=discord.Color.red())
         await interaction.response.edit_message(embed=embed, view=None)
 
+    async def interaction_check(self, interaction: discord.Interaction):
+        return interaction.user.id == self.author.id
+    
 
 class highlowCog(commands.Cog):
     def __init__(self, bot):
