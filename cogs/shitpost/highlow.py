@@ -5,9 +5,8 @@ import random
 bot = commands.Bot(command_prefix='!', intents=discord.Intents.all())
 
 class Buttons(discord.ui.View):
-    def __init__(self, author:discord.User):
+    def __init__(self):
         super().__init__()
-        self.owner = author
         self.random_number = random.randint(1, 100)
         self.count = 0
         self.highest = 0
