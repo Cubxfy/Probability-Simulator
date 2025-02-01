@@ -56,7 +56,7 @@ class highlowCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.hybrid_command(aliases:["hl"])
+    @commands.hybrid_command(aliases=["hl"])
     async def highlow(self, ctx):
         view = Buttons()
         await ctx.reply(f"Starting number: {view.random_number}\nHighest Score: {view.highest}", view=view)
