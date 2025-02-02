@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 import random
 import sqlite3
-import time
+import asyncio
 
 bot = commands.Bot(command_prefix='!', intents=discord.Intents.all())
 
@@ -37,8 +37,7 @@ class Buttons(discord.ui.View):
         if self.count > self.highest and result == "Left":
             self.highest = self.count  
 
-        if result != "Start":
-            color = discord.Color.red()   
+        color = discord.Color.red if result != "Start" else discord.Color.green   
 
         embed = discord.Embed(
             title= f"{result}\nScore: ",
@@ -66,7 +65,7 @@ class Buttons(discord.ui.View):
                 self.count += 1
                 print("Crash Game + 1")
                 await self.update_embed(interaction, result)
-                time.sleep(1)
+                await asyncio.sleep(1)
                 
 
     #Leave Button
