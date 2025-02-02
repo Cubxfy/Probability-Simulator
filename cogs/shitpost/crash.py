@@ -39,7 +39,10 @@ class Buttons(discord.ui.View):
             self.highest = self.count  
 
         color = discord.Color.green() if result == "Left" else discord.Color.default()
-    
+
+        if result == "Lose":
+            color = discord.Color.red()
+        
         embed = discord.Embed(
             title= f"{result}\nScore: {self.count}",
             description=(f"Highest Score: {self.highest}"),
