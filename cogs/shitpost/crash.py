@@ -51,7 +51,9 @@ class Buttons(discord.ui.View):
     @discord.ui.button(label="Start Game", style=discord.ButtonStyle.grey)
     async def button_start(self, interaction:discord.Interaction, button: discord.ui.Button):
         print("Start Button Clicked")
-
+        
+        result = "Start"
+        
         while result != "Lose" or "Left":
             print("Crash Game Running")
             new_number = random.randint(1, 10)
