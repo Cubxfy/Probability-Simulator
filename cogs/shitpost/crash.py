@@ -58,6 +58,8 @@ class Buttons(discord.ui.View):
     async def button_start(self, interaction:discord.Interaction, button: discord.ui.Button):
         print("Start Button Clicked")
         
+        button.disabled = True
+        
         result = "Start"
         
         while self.running:
