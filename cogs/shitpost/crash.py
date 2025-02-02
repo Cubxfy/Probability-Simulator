@@ -34,7 +34,7 @@ class Buttons(discord.ui.View):
 
     #Embed Updater
     async def update_embed(self, interaction: discord.Interaction, result: str):
-        if self.count > self.highest:
+        if self.count > self.highest and result == "Left":
             self.highest = self.count  
 
         if result != "Correct":
@@ -42,7 +42,7 @@ class Buttons(discord.ui.View):
 
         embed = discord.Embed(
             title= f"{result}\nScore: {self.random_number}",
-            description=(f"Highhest Score: {self.highest}"),
+            description=(f"Highest Score: {self.highest}"),
             color=color
         )
 
@@ -62,11 +62,11 @@ class Buttons(discord.ui.View):
                 result = "Lose"
                 print("Crash Game Ended")
             else:
-                self.count += 0
-                time.sleep(3)
+                self.count += 1
+                time.sleep(1)
+                await self.update_embed(interaction, result)
                 
-            await self.update_embed(interaction, result)   
-    
+
     #Leave Button
     @discord.ui.button(label="Cash Out", style=discord.ButtonStyle.grey)
     async def button_leave(self, interaction: discord.Interaction, button: discord.ui.Button):
