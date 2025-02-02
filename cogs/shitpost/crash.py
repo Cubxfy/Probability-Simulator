@@ -51,10 +51,17 @@ class Buttons(discord.ui.View):
 
         print("Waited on interaction")
         
-        if interaction.response.is_done():
-            await interaction.message.edit(embed=embed, view=self)
+        if result == "Lose":
+            if interaction.response.is_done():
+                await interaction.message.edit(embed=embed, view=None)
+            else:
+                await interaction.response.edit_message(embed=embed, view=None)
         else:
-            await interaction.response.edit_message(embed=embed, view=self)
+            if interaction.response.is_done():
+                await interaction.message.edit(embed=embed, view=self)
+            else:
+                await interaction.response.edit_message(embed=embed, view=self)
+
     
     #Start Button
     @discord.ui.button(label="Start Game", style=discord.ButtonStyle.grey)
@@ -73,7 +80,6 @@ class Buttons(discord.ui.View):
                 print("Crash Game Ended")
                 result = "Lose"
                 await self.update_embed(interaction, result)
-                await interaction.response.edit_message(view=None)
                 break
             else:
                 self.count += 1
