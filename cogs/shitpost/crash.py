@@ -11,7 +11,7 @@ class Buttons(discord.ui.View):
         super().__init__()
         self.user_id = user_id
         self.guild_id = guild_id
-        self.random_number = random.randint(1, 5)
+        self.random_number = random.randint(1, 7)
         self.count = 0
         self.running = True
         
@@ -44,8 +44,6 @@ class Buttons(discord.ui.View):
             color == discord.Color.yellow()
         elif result == "Lose":
             color == discord.Color.red()
-        
-        color = discord.Color.red() if result != "Start" else discord.Color.green()   
     
         embed = discord.Embed(
             title= f"{result}\nScore: {self.count}",
@@ -72,7 +70,7 @@ class Buttons(discord.ui.View):
         
         while self.running:
             print("Crash Game Running")
-            new_number = random.randint(1, 5)
+            new_number = random.randint(1, 7)
             if new_number == self.random_number:
                 print("Crash Game Ended")
                 result = "Lose"
