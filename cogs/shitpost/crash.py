@@ -65,7 +65,7 @@ class Buttons(discord.ui.View):
     async def button_start(self, interaction:discord.Interaction, button: discord.ui.Button):
         print("Start Button Clicked")
         
-        button.disabled = True
+        self.remove_item(button)
         await interaction.response.edit_message(view=self)
         
         result = "Start"
