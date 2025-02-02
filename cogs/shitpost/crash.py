@@ -73,6 +73,7 @@ class Buttons(discord.ui.View):
                 print("Crash Game Ended")
                 result = "Lose"
                 await self.update_embed(interaction, result)
+                await interaction.response.edit_message(view=None)
                 break
             else:
                 self.count += 1
