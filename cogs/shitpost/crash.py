@@ -46,6 +46,7 @@ class Buttons(discord.ui.View):
             color=color
         )
 
+        print("Waited on interaction")
         await interaction.response.edit_message(embed=embed, view=self)
     
     #Start Button
