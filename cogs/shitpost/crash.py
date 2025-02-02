@@ -37,12 +37,12 @@ class Buttons(discord.ui.View):
         if self.count > self.highest and result == "Left":
             self.highest = self.count  
 
-        if result != "Correct":
+        if result != "Start":
             color = discord.Color.red()   
 
         embed = discord.Embed(
-            title= f"{result}\nScore: {self.random_number}",
-            description=(f"Highest Score: {self.highest}"),
+            title= f"{result}\nScore: ",
+            description=(f"Highest Score: "),
             color=color
         )
 
@@ -63,6 +63,7 @@ class Buttons(discord.ui.View):
                 print("Crash Game Ended")
             else:
                 self.count += 1
+                print("Crash Game + 1")
                 time.sleep(1)
                 await self.update_embed(interaction, result)
                 
@@ -104,7 +105,7 @@ class crashCog(commands.Cog):
         self.conn = sqlite3.connect("crash.db")
         self.cursor = self.conn.cursor()
 
-    @commands.hybrid_command()
+    @commands.hybrid_command(aliases=['cr'])
     async def crash(self, ctx):
         view = Buttons(ctx.author.id, ctx.guild.id)
         

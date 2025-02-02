@@ -44,6 +44,7 @@ class Buttons(discord.ui.View):
             color=color
         )
 
+        print("waited on interaction")
         await interaction.response.edit_message(embed=embed, view=self)
     
     #Higher Button
