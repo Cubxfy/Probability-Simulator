@@ -89,7 +89,6 @@ class Buttons(discord.ui.View):
                 await self.update_embed(interaction, result)
                 print("Sleeping")
                 await asyncio.sleep(1.2)
-                
 
     #Leave Button
     @discord.ui.button(label="Cash Out", style=discord.ButtonStyle.grey)
