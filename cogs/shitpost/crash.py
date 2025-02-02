@@ -97,13 +97,7 @@ class Buttons(discord.ui.View):
         print("Leave Button Clicked")
 
         self.running = False
-        
-        await self.update_embed(interaction, "Left")
-
-    #Close Button
-    @discord.ui.button(label="Close", style=discord.ButtonStyle.grey)
-    async def button_end(self, interaction: discord.Interaction, button: discord.ui.Button):
-        print("Close Button Clicked")
+        self.remove_item(self.button_leave)
         
         self.cursor.execute('''
             INSERT INTO crash (highest_streak, guild_id, user_id)
@@ -119,8 +113,7 @@ class Buttons(discord.ui.View):
         self.conn.commit()
         self.conn.close()
         
-        embed = discord.Embed(title="**Game Ended**", description=f"Score: {self.highest}", color=discord.Color.red())
-        await interaction.response.edit_message(embed=embed, view=None)    
+        await self.update_embed(interaction, "Left")  
 
 class crashCog(commands.Cog):
     def __init__(self, bot):
