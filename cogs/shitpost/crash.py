@@ -65,7 +65,6 @@ class Buttons(discord.ui.View):
             else:
                 self.count += 1
                 print("Crash Game + 1")
-                await self.update_embed(interaction, result)
                 print("Sleeping")
                 await asyncio.sleep(1)
                 
