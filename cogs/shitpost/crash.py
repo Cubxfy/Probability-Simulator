@@ -38,7 +38,10 @@ class Buttons(discord.ui.View):
         if self.count > self.highest and result == "Left":
             self.highest = self.count  
 
-        if result == "Start" or "Left":
+        if result == "Start":
+            print("Green")
+            color = discord.Color.green()
+        elif result == "Left":
             print("Green")
             color = discord.Color.green()
         elif result == "InProgress":
@@ -47,6 +50,8 @@ class Buttons(discord.ui.View):
         elif result == "Lose":
             print("Red")
             color == discord.Color.red()
+        else:
+            color == discord.Color.default()
     
         embed = discord.Embed(
             title= f"{result}\nScore: {self.count}",
