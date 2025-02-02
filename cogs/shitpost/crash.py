@@ -65,8 +65,8 @@ class Buttons(discord.ui.View):
             else:
                 self.count += 1
                 print("Crash Game + 1")
-                time.sleep(1)
                 await self.update_embed(interaction, result)
+                time.sleep(1)
                 
 
     #Leave Button
