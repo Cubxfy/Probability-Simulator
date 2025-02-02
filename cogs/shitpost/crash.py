@@ -52,14 +52,8 @@ class Buttons(discord.ui.View):
         print("Waited on interaction")
         
         if result == "Lose":
-            if interaction.response.is_done():
-                await interaction.message.edit(embed=embed, view=None)
-            else:
                 await interaction.response.edit_message(embed=embed, view=None)
         else:
-            if interaction.response.is_done():
-                await interaction.message.edit(embed=embed, view=self)
-            else:
                 await interaction.response.edit_message(embed=embed, view=self)
 
     
