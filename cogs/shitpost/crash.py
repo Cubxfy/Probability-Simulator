@@ -15,9 +15,6 @@ class Buttons(discord.ui.View):
         self.count = 0
         self.running = True
         
-        self.add_item(self.button_start)
-        self.add_item(self.button_end)
-        
         #DB initialisation
         self.conn = sqlite3.connect("crash.db")
         self.cursor = self.conn.cursor()
