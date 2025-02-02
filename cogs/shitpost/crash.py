@@ -12,7 +12,8 @@ class Buttons(discord.ui.View):
         self.user_id = user_id
         self.guild_id = guild_id
         self.random_number = random.randint(1, 10)
-        self.count = 0      
+        self.count = 0
+        self.running = True
         
         #DB initialisation
         self.conn = sqlite3.connect("crash.db")
@@ -46,7 +47,11 @@ class Buttons(discord.ui.View):
         )
 
         print("Waited on interaction")
-        await interaction.response.edit_message(embed=embed, view=self)
+        
+        if interaction.response.is_done():
+            await interaction.message.edit(embed=embed, view=self)
+        else:
+            await interaction.response.edit_message(embed=embed, view=self)
     
     #Start Button
     @discord.ui.button(label="Start Game", style=discord.ButtonStyle.grey)
@@ -55,10 +60,10 @@ class Buttons(discord.ui.View):
         
         result = "Start"
         
-        while True:
+        while self.running:
             print("Crash Game Running")
             new_number = random.randint(1, 10)
-            if new_number == self.random_number or result == "Left":
+            if new_number == self.random_number:
                 print("Crash Game Ended")
                 result = "Lose"
                 break
@@ -68,16 +73,17 @@ class Buttons(discord.ui.View):
                 result = "InProgress"
                 await self.update_embed(interaction, result)
                 print("Sleeping")
+                await asyncio.sleep(1)
                 
 
     #Leave Button
     @discord.ui.button(label="Cash Out", style=discord.ButtonStyle.grey)
     async def button_leave(self, interaction: discord.Interaction, button: discord.ui.Button):
         print("Leave Button Clicked")
+
+        self.running = False
         
-        result = "Left"
-        
-        await self.update_embed(interaction, result)
+        await self.update_embed(interaction, "Left")
 
     #Close Button
     @discord.ui.button(label="Close", style=discord.ButtonStyle.grey)
