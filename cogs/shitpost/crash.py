@@ -73,6 +73,8 @@ class Buttons(discord.ui.View):
         
         self.add_item(self.button_leave)
         
+        await interaction.response.edit_message(view=self)
+        
         result = "Start"
         
         while self.running:
