@@ -37,8 +37,21 @@ class Buttons(discord.ui.View):
     async def update_embed(self, interaction: discord.Interaction, result: str):
         if self.count > self.highest and result == "Left":
             self.highest = self.count  
-        
-        color = discord.Color.default()
+
+        if result == "Start":
+            print("Green")
+            color = discord.Color.green()
+        elif result == "Left":
+            print("Green")
+            color = discord.Color.green()
+        elif result == "InProgress":
+            print("Yellow")
+            color == discord.Color.yellow()
+        elif result == "Lose":
+            print("Red")
+            color == discord.Color.red()
+        else:
+            color == discord.Color.default()
     
         embed = discord.Embed(
             title= f"{result}\nScore: {self.count}",
