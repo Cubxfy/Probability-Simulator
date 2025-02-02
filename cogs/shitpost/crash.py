@@ -106,13 +106,13 @@ class Buttons(discord.ui.View):
         print("Close Button Clicked")
         
         self.cursor.execute('''
-            INSERT INTO crash (highest_streak, guild_id, user_id)
+            INSERT INTO crash (highest_multi, guild_id, user_id)
             VALUES (?, ?, ?)
             ON CONFLICT(guild_id, user_id) 
-            DO UPDATE SET highest_streak = CASE 
-                WHEN excluded.highest_streak > crash.highest_streak 
-                THEN excluded.highest_streak 
-                ELSE crash.highest_streak 
+            DO UPDATE SET highest_multi = CASE 
+                WHEN excluded.highest_multi > crash.highest_multi 
+                THEN excluded.highest_multi 
+                ELSE crash.highest_multi 
             END
         ''', (self.highest, self.guild_id, self.user_id))
         
