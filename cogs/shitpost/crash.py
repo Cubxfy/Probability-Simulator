@@ -47,7 +47,11 @@ class Buttons(discord.ui.View):
 
         await interaction.response.edit_message(embed=embed, view=self)
     
-    async def crash_game(self, interaction: discord.Interaction, result: str):
+    #Start Button
+    @discord.ui.button(label="Start Game", style=discord.ButtonStyle.grey)
+    async def button_start(self, interaction:discord.Interaction, button: discord.ui.Button):
+        print("Start Button Clicked")
+
         while result != "Lose" or "Left":
             print("Crash Game Running")
             new_number = random.randint(1, 10)
@@ -57,7 +61,7 @@ class Buttons(discord.ui.View):
             else:
                 self.count += 0
                 
-            await self.update_embed(interaction, result)
+            await self.update_embed(interaction, result)   
     
     #Leave Button
     @discord.ui.button(label="Cash Out", style=discord.ButtonStyle.grey)
