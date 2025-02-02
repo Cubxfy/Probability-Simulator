@@ -55,15 +55,17 @@ class Buttons(discord.ui.View):
         
         result = "Start"
         
-        while result != "Lose" or "Left":
+        while True:
             print("Crash Game Running")
             new_number = random.randint(1, 10)
-            if new_number == self.random_number:
-                result = "Lose"
+            if new_number == self.random_number or result == "Left":
                 print("Crash Game Ended")
+                result = "Lose"
+                break
             else:
                 self.count += 1
                 print("Crash Game + 1")
+                await self.update_embed(interaction, result)
                 print("Sleeping")
                 await asyncio.sleep(1)
                 
