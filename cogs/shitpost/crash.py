@@ -47,15 +47,23 @@ class Buttons(discord.ui.View):
 
         await interaction.response.edit_message(embed=embed, view=self)
     
+    async def crash_game(self, interaction: discord.Interaction, result: str):
+        while result != "Lose" or "Left":
+            new_number = random.randint(1, 10)
+            if new_number == self.random_number:
+                result = "Lose"
+            else:
+                self.count += 0
+                
+            await self.update_embed(interaction, result)
+    
     #Leave Button
-    @discord.ui.button(label="Higher", style=discord.ButtonStyle.grey)
-    async def button_higher(self, interaction: discord.Interaction, button: discord.ui.Button):
+    @discord.ui.button(label="Cash Out", style=discord.ButtonStyle.grey)
+    async def button_leave(self, interaction: discord.Interaction, button: discord.ui.Button):
         print("Leave Button Clicked")
-        new_number = random.randint(1, 100)
-        if new_number == self.random_number:
-            result = "Lose"
-        else:
-            self.count += 0
+        
+        result = "Left"
+        
         await self.update_embed(interaction, result)
 
     #Close Button
