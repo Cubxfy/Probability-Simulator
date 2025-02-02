@@ -69,8 +69,7 @@ class Buttons(discord.ui.View):
         print("Start Button Clicked")
         
         self.remove_item(button)        
-        
-        self.add_item(self.button_leave)
+        self.remove_item(self.button_end)
         await interaction.response.edit_message(view=self)
         
         result = "Start"
