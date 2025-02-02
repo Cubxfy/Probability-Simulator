@@ -68,7 +68,6 @@ class Buttons(discord.ui.View):
                 result = "InProgress"
                 await self.update_embed(interaction, result)
                 print("Sleeping")
-                await asyncio.sleep(1)
                 
 
     #Leave Button
