@@ -40,8 +40,8 @@ class Buttons(discord.ui.View):
             color = discord.Color.red()   
 
         embed = discord.Embed(
-            title= f"{result}\nNew Number: {self.random_number}",
-            description=(f"Current Score: {self.count}"),
+            title= f"{result}\nScore: {self.random_number}",
+            description=(f"Highhest Score: {self.highest}"),
             color=color
         )
 
@@ -49,9 +49,11 @@ class Buttons(discord.ui.View):
     
     async def crash_game(self, interaction: discord.Interaction, result: str):
         while result != "Lose" or "Left":
+            print("Crash Game Running")
             new_number = random.randint(1, 10)
             if new_number == self.random_number:
                 result = "Lose"
+                print("Crash Game Ended")
             else:
                 self.count += 0
                 
