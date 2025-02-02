@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import random
 import sqlite3
+import time
 
 bot = commands.Bot(command_prefix='!', intents=discord.Intents.all())
 
@@ -62,6 +63,7 @@ class Buttons(discord.ui.View):
                 print("Crash Game Ended")
             else:
                 self.count += 0
+                time.sleep(3)
                 
             await self.update_embed(interaction, result)   
     
