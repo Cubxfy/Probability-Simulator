@@ -15,6 +15,9 @@ class Buttons(discord.ui.View):
         self.count = 0
         self.running = True
         
+        self.add_item(self.button_start)
+        self.add_item(self.button_end)
+        
         #DB initialisation
         self.conn = sqlite3.connect("crash.db")
         self.cursor = self.conn.cursor()
@@ -69,6 +72,8 @@ class Buttons(discord.ui.View):
         print("Start Button Clicked")
         
         self.remove_item(button)        
+        
+        self.add_item(self.button_leave)
         await interaction.response.edit_message(view=self)
         
         result = "Start"
