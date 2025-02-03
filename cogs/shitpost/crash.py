@@ -142,9 +142,7 @@ class Buttons(discord.ui.View):
         self.add_item(self.button_leave)
         
         result = "Start"
-        
-        await interaction.response.defer()
-               
+                     
         self.round += 1
         while self.running:
             print("Crash Game Running")
