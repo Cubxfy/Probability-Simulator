@@ -43,7 +43,7 @@ class Buttons(discord.ui.View):
 
         embed = discord.Embed(
             title= f"{result}\nNew Number: {self.random_number}",
-            description=(f"Current Score: {self.count}\nHighest Score: {self.highest}\nSession Round Count: {self.rounds}\nSession WinRate: {self.roundswin/(self.rounds-self.roundswin)}"),
+            description=(f"Current Score: {self.count}\nHighest Score: {self.highest}\nSession Round Count: {self.rounds}"),
             color=color
         )
 
@@ -58,7 +58,6 @@ class Buttons(discord.ui.View):
         if new_number >= self.random_number:
             result = "Correct"
             self.count += 1
-            self.roundswin += 1
         else:
             result = "Incorrect"
             if self.count > self.highest:
@@ -76,7 +75,6 @@ class Buttons(discord.ui.View):
         if new_number <= self.random_number:
             result = "Correct"
             self.count += 1
-            self.roundswin += 1
         else:
             result = "Incorrect"
             if self.count >= self.highest:
