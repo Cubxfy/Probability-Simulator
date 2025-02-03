@@ -126,26 +126,25 @@ class Buttons(discord.ui.View):
     async def button_again(self, interaction:discord.Interaction, button: discord.ui.Button):
         print("Again Button Clicked")
         
-        self.remove_item(button)        
-        self.remove_item(self.button_end)
-        await interaction.response.edit_message(view=self)
+        self.count = 0
+        self.running = True
+        self.random_number = random.randint(1, 8)
         
-        result = "Again"
+        self.clear_items()
         
+        self.add_item(self.button_leave)
+
         while self.running:
             print("Crash Game Running")
             new_number = random.randint(1, 8)
             if new_number == self.random_number:
                 print("Crash Game Ended")
-                result = "Lose"
-                await self.update_embed(interaction, result)
+                await self.update_embed(interaction, "Lose")
                 break
             else:
                 self.count += 1
-                print("Crash Game + 1")
-                result = "InProgress"
-                await self.update_embed(interaction, result)
-                print("Sleeping")
+                print("Crash Game +1")
+                await self.update_embed(interaction, "InProgress")
                 await asyncio.sleep(1.2)
 
 
