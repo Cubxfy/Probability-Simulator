@@ -73,6 +73,7 @@ class Buttons(discord.ui.View):
         
         self.remove_item(button)        
         self.remove_item(self.button_end)
+        self.remove_item(self.button_again)
         
         await interaction.response.edit_message(view=self)
         
@@ -85,6 +86,7 @@ class Buttons(discord.ui.View):
                 print("Crash Game Ended")
                 result = "Lose"
                 await self.update_embed(interaction, result)
+                self.remove_item(self.button_leave)
                 self.add_item(self.button_again)
                 break
             else:
