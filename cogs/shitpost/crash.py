@@ -169,6 +169,8 @@ class Buttons(discord.ui.View):
         self.conn.commit()
         self.conn.close()
         
+        self.add_item(self.button_again)
+        
         embed = discord.Embed(title="**Interaction Ended**", color=discord.Color.red())
         await interaction.response.edit_message(embed=embed, view=None)    
 
