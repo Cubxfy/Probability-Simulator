@@ -19,7 +19,10 @@ class Buttons(discord.ui.View):
         self.conn = sqlite3.connect("crash.db")
         self.cursor = self.conn.cursor()
         
+        #button shit
         self.remove_item(self.button_again)
+        self.button_leave_ref = None
+        self.button_again_ref = None
         
         self.cursor.execute('''
             CREATE TABLE IF NOT EXISTS crash (
@@ -86,8 +89,12 @@ class Buttons(discord.ui.View):
                 print("Crash Game Ended")
                 result = "Lose"
                 await self.update_embed(interaction, result)
-                self.remove_item(self.button_leave)
-                self.add_item(self.button_again)
+                
+                if self.button_leave_ref:
+                    self.remove_item(self.button_leave_ref)
+                if self.button_again_ref:
+                    self.add_item(self.button_again_ref)
+                
                 break
             else:
                 self.count += 1
@@ -101,6 +108,8 @@ class Buttons(discord.ui.View):
     @discord.ui.button(label="Cash Out", style=discord.ButtonStyle.grey)
     async def button_leave(self, interaction: discord.Interaction, button: discord.ui.Button):
         print("Leave Button Clicked")
+        
+        self.button_leave_ref = button
 
         self.running = False
         self.remove_item(button)
@@ -117,23 +126,13 @@ class Buttons(discord.ui.View):
                 ELSE crash.highest_multi 
             END
         ''', (self.highest, self.guild_id, self.user_id))
-            
-        
-    #Close Button
-    @discord.ui.button(label="Close", style=discord.ButtonStyle.grey)
-    async def button_end(self, interaction: discord.Interaction, button: discord.ui.Button):
-        print("Close Button Clicked")
-        
-        self.conn.commit()
-        self.conn.close()
-        
-        embed = discord.Embed(title="**Game Ended**", description=f"Score: {self.highest}", color=discord.Color.red())
-        await interaction.response.edit_message(embed=embed, view=None)    
-        
+    
     #Play Again Button
     @discord.ui.button(label="Play Again", style=discord.ButtonStyle.grey)
     async def button_again(self, interaction:discord.Interaction, button: discord.ui.Button):
         print("Again Button Clicked")
+        
+        self.button_again_ref = button
         
         self.count = 0
         self.running = True
@@ -155,7 +154,18 @@ class Buttons(discord.ui.View):
                 print("Crash Game +1")
                 await self.update_embed(interaction, "InProgress")
                 await asyncio.sleep(1.2)
-
+    
+        
+    #Close Button
+    @discord.ui.button(label="Close", style=discord.ButtonStyle.grey)
+    async def button_end(self, interaction: discord.Interaction, button: discord.ui.Button):
+        print("Close Button Clicked")
+        
+        self.conn.commit()
+        self.conn.close()
+        
+        embed = discord.Embed(title="**Interaction Ended**", color=discord.Color.red())
+        await interaction.response.edit_message(embed=embed, view=None)    
 
 class crashCog(commands.Cog):
     def __init__(self, bot):
