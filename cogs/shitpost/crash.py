@@ -97,11 +97,9 @@ class Buttons(discord.ui.View):
                 print("Sleeping")
                 await asyncio.sleep(1.2)
 
-        if result == "Lose":
-            print("Checked result case")
-            await interaction.response.defer()
-            self.clear_items()
-            self.add_item(self.button_again)
+
+        self.clear_items()
+        self.add_item(self.button_again)
         
     #Leave Button
     @discord.ui.button(label="Cash Out", style=discord.ButtonStyle.grey)
