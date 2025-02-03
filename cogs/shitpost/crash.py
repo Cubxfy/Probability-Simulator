@@ -57,9 +57,9 @@ class Buttons(discord.ui.View):
         
         if result == "Lose":
             if interaction.response.is_done():
-                await interaction.message.edit(embed=embed, view=None)
+                await interaction.message.edit(embed=embed)
             else:
-                await interaction.response.edit_message(embed=embed, view=None)
+                await interaction.response.edit_message(embed=embed)
                 
         else:
             if interaction.response.is_done():
