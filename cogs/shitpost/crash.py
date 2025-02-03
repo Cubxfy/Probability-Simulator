@@ -56,6 +56,7 @@ class Buttons(discord.ui.View):
                 await interaction.message.edit(embed=embed, view=None)
             else:
                 await interaction.response.edit_message(embed=embed, view=None)
+                
         else:
             if interaction.response.is_done():
                 await interaction.message.edit(embed=embed, view=self)
@@ -81,6 +82,8 @@ class Buttons(discord.ui.View):
                 print("Crash Game Ended")
                 result = "Lose"
                 await self.update_embed(interaction, result)
+                self.clear_items()
+                self.add_item(self.button_again)
                 break
             else:
                 self.count += 1
