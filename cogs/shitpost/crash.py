@@ -142,7 +142,8 @@ class Buttons(discord.ui.View):
         self.add_item(self.button_leave)
         
         result = "Start"
-                     
+        
+        self.rounds += 1      
         while self.running:
             print("Crash Game Running")
             new_number = random.randint(1, 8)
@@ -152,7 +153,6 @@ class Buttons(discord.ui.View):
                 self.remove_item(self.button_leave)
                 self.add_item(self.button_again)
                 await self.update_embed(interaction, result)
-                self.rounds += 1
                 break
             else:
                 self.count += 1
