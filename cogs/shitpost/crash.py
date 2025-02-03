@@ -56,7 +56,6 @@ class Buttons(discord.ui.View):
                 await interaction.message.edit(embed=embed, view=None)
             else:
                 await interaction.response.edit_message(embed=embed, view=None)
-            self.add_item(self.button_again)
         else:
             if interaction.response.is_done():
                 await interaction.message.edit(embed=embed, view=self)
