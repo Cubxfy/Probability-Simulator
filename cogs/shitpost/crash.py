@@ -80,13 +80,14 @@ class Buttons(discord.ui.View):
         
         result = "Start"
         
-       
+        # game loop
         while self.running:
             print("Crash Game Running")
             new_number = random.randint(1, 8)
             if new_number == self.random_number:
                 print("Crash Game Ended")
                 result = "Lose"
+                self.add_item(self.button_leave)
                 await self.update_embed(interaction, result)
                 break
             else:
@@ -97,7 +98,7 @@ class Buttons(discord.ui.View):
                 print("Sleeping")
                 await asyncio.sleep(1)
 
-        self.add_item(self.button_again)
+        # self.add_item(self.button_again)
         
     #Leave Button
     @discord.ui.button(label="Cash Out", style=discord.ButtonStyle.grey)
@@ -133,18 +134,7 @@ class Buttons(discord.ui.View):
         
         self.add_item(self.button_leave)
 
-        while self.running:
-            print("Crash Game Running")
-            new_number = random.randint(1, 8)
-            if new_number == self.random_number:
-                print("Crash Game Ended")
-                await self.update_embed(interaction, "Lose")
-                break
-            else:
-                self.count += 1
-                print("Crash Game +1")
-                await self.update_embed(interaction, "InProgress")
-                await asyncio.sleep(1.2)
+
     
         
     #Close Button
