@@ -19,6 +19,8 @@ class Buttons(discord.ui.View):
         self.conn = sqlite3.connect("crash.db")
         self.cursor = self.conn.cursor()
         
+        self.remove_item(self.button_again)
+        
         self.cursor.execute('''
             CREATE TABLE IF NOT EXISTS crash (
                 highest_multi INTEGER,
@@ -53,8 +55,6 @@ class Buttons(discord.ui.View):
                
         if result == "Lose":
             if interaction.response.is_done():
-                self.remove_item(self.button_leave)
-                self.add_item(self.button_again)
                 await interaction.message.edit(embed=embed)
             else:
                 await interaction.response.edit_message(embed=embed)
