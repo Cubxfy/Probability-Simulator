@@ -116,8 +116,8 @@ class Buttons(discord.ui.View):
             VALUES (?, ?, ?)
             ON CONFLICT(guild_id, user_id) 
             DO UPDATE SET highest_multi = CASE 
-                WHEN ? > crash.highest_multi 
-                THEN ? 
+                WHEN excluded.highest_multi > crash.highest_multi 
+                THEN excluded.highest_multi 
                 ELSE crash.highest_multi 
             END
         ''', (self.highest, self.guild_id, self.user_id))
