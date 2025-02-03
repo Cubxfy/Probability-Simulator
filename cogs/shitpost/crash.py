@@ -52,10 +52,12 @@ class Buttons(discord.ui.View):
         print("Waited on interaction")
         
         if result == "Lose":
+            self.clear_items()
+            self.add_item(self.button_again)
+        
+        if result == "Lose":
             if interaction.response.is_done():
                 await interaction.message.edit(embed=embed, view=None)
-                self.clear_items()
-                self.add_item(self.button_again)
             else:
                 await interaction.response.edit_message(embed=embed, view=None)
                 
