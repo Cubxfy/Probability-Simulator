@@ -99,6 +99,7 @@ class Buttons(discord.ui.View):
 
         if result == "Lose":
             print("Checked result case")
+            await interaction.response.defer()
             self.clear_items()
             self.add_item(self.button_again)
         
