@@ -73,6 +73,7 @@ class Buttons(discord.ui.View):
         
         self.remove_item(button)        
         self.remove_item(self.button_end)
+        
         await interaction.response.edit_message(view=self)
         
         result = "Start"
@@ -108,19 +109,21 @@ class Buttons(discord.ui.View):
             VALUES (?, ?, ?)
             ON CONFLICT(guild_id, user_id) 
             DO UPDATE SET highest_multi = CASE 
-                WHEN excluded.highest_multi > crash.highest_multi 
-                THEN excluded.highest_multi 
+                WHEN ? > crash.highest_multi 
+                THEN ? 
                 ELSE crash.highest_multi 
             END
         ''', (self.highest, self.guild_id, self.user_id))
-        
-        self.conn.commit()
-        self.conn.close()
+            
         
     #Close Button
     @discord.ui.button(label="Close", style=discord.ButtonStyle.grey)
     async def button_end(self, interaction: discord.Interaction, button: discord.ui.Button):
         print("Close Button Clicked")
+        
+        self.conn.commit()
+        self.conn.close()
+        
         embed = discord.Embed(title="**Game Ended**", description=f"Score: {self.highest}", color=discord.Color.red())
         await interaction.response.edit_message(embed=embed, view=None)    
         
@@ -136,6 +139,7 @@ class Buttons(discord.ui.View):
         self.clear_items()
         
         self.add_item(self.button_leave)
+        self.add_item(self.button_again)
 
         while self.running:
             print("Crash Game Running")
