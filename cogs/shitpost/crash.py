@@ -19,8 +19,9 @@ class Buttons(discord.ui.View):
         self.conn = sqlite3.connect("crash.db")
         self.cursor = self.conn.cursor()
         
-        #button shit
+        #button racism
         self.remove_item(self.button_again)
+        self.remove_item(self.button_leave)
 
         self.cursor.execute('''
             CREATE TABLE IF NOT EXISTS crash (
