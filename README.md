@@ -11,8 +11,8 @@ Discord Gambling Bot
  * Crash
    * `!cr`, `!crash`, `/crash`  
 
-### Roadmap
-
- Checkout [this page]() to see what the project roadmap looks like
-
-## Contribute
+### To Come (in no particular order)
+  * Mission Uncrossable
+  * Roulette
+  * Blackjack
+  * Coinflip
