@@ -133,6 +133,8 @@ class Buttons(discord.ui.View):
         
         self.clear_items()
         
+        self.add_item(self.button_leave)
+        
         result = "Start"
         
         while self.running:
