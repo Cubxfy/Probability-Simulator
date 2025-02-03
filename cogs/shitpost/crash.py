@@ -88,12 +88,13 @@ class Buttons(discord.ui.View):
             if new_number == self.random_number:
                 print("Crash Game Ended")
                 result = "Lose"
-                await self.update_embed(interaction, result)
                 
                 if self.button_leave_ref:
                     self.remove_item(self.button_leave_ref)
                 if self.button_again_ref:
                     self.add_item(self.button_again_ref)
+                
+                await self.update_embed(interaction, result)
                 
                 break
             else:
