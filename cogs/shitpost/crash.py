@@ -14,6 +14,7 @@ class Buttons(discord.ui.View):
         self.random_number = random.randint(1, 8)
         self.count = 0
         self.running = True
+        self.rounds = 0
         
         #DB initialisation
         self.conn = sqlite3.connect("crash.db")
@@ -49,7 +50,7 @@ class Buttons(discord.ui.View):
         
         embed = discord.Embed(
             title= f"{result}\nScore: {self.count}",
-            description=(f"Highest Score: {self.highest}"),
+            description=(f"Highest Score: {self.highest}\nGames This Session: {self.rounds}"),
             color=color
         )
 
@@ -84,6 +85,7 @@ class Buttons(discord.ui.View):
         result = "Start"
         
         # game loop
+        self.rounds += 1
         while self.running:
             print("Crash Game Running")
             new_number = random.randint(1, 8)
@@ -111,6 +113,7 @@ class Buttons(discord.ui.View):
 
         self.running = False
         self.remove_item(button)
+        self.add_item(self.button_again)
         
         await self.update_embed(interaction, "Left")
 
@@ -140,6 +143,7 @@ class Buttons(discord.ui.View):
         
         result = "Start"
         
+        self.round += 1
         while self.running:
             print("Crash Game Running")
             new_number = random.randint(1, 8)
