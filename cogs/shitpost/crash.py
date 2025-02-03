@@ -21,9 +21,7 @@ class Buttons(discord.ui.View):
         
         #button shit
         self.remove_item(self.button_again)
-        self.button_leave_ref = None
-        self.button_again_ref = None
-        
+
         self.cursor.execute('''
             CREATE TABLE IF NOT EXISTS crash (
                 highest_multi INTEGER,
@@ -82,6 +80,7 @@ class Buttons(discord.ui.View):
         
         result = "Start"
         
+       
         while self.running:
             print("Crash Game Running")
             new_number = random.randint(1, 8)
@@ -89,7 +88,6 @@ class Buttons(discord.ui.View):
                 print("Crash Game Ended")
                 result = "Lose"
                 await self.update_embed(interaction, result)
-                
                 break
             else:
                 self.count += 1
@@ -99,12 +97,14 @@ class Buttons(discord.ui.View):
                 print("Sleeping")
                 await asyncio.sleep(1.2)
 
+        if result == "Lose":
+            self.clear_items()
+            self.add_item(self.button_again)
+        
     #Leave Button
     @discord.ui.button(label="Cash Out", style=discord.ButtonStyle.grey)
     async def button_leave(self, interaction: discord.Interaction, button: discord.ui.Button):
         print("Leave Button Clicked")
-        
-        self.button_leave_ref = button
 
         self.running = False
         self.remove_item(button)
@@ -126,8 +126,6 @@ class Buttons(discord.ui.View):
     @discord.ui.button(label="Play Again", style=discord.ButtonStyle.grey)
     async def button_again(self, interaction:discord.Interaction, button: discord.ui.Button):
         print("Again Button Clicked")
-        
-        self.button_again_ref = button
         
         self.count = 0
         self.running = True
