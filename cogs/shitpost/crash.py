@@ -52,6 +52,7 @@ class Buttons(discord.ui.View):
         print("Waited on interaction")
         
         if result == "Lose":
+            self.add_item(self.button_again)
             if interaction.response.is_done():
                 await interaction.message.edit(embed=embed, view=None)
             else:
@@ -100,11 +101,6 @@ class Buttons(discord.ui.View):
         
         await self.update_embed(interaction, "Left")
 
-    #Close Button
-    @discord.ui.button(label="Close", style=discord.ButtonStyle.grey)
-    async def button_end(self, interaction: discord.Interaction, button: discord.ui.Button):
-        print("Close Button Clicked")
-        
         self.cursor.execute('''
             INSERT INTO crash (highest_multi, guild_id, user_id)
             VALUES (?, ?, ?)
@@ -119,8 +115,40 @@ class Buttons(discord.ui.View):
         self.conn.commit()
         self.conn.close()
         
+    #Close Button
+    @discord.ui.button(label="Close", style=discord.ButtonStyle.grey)
+    async def button_end(self, interaction: discord.Interaction, button: discord.ui.Button):
+        print("Close Button Clicked")
         embed = discord.Embed(title="**Game Ended**", description=f"Score: {self.highest}", color=discord.Color.red())
         await interaction.response.edit_message(embed=embed, view=None)    
+        
+    #Play Again Button
+    @discord.ui.button(label="Play Again", style=discord.ButtonStyle.grey)
+    async def button_again(self, interaction:discord.Interaction, button: discord.ui.Button):
+        print("Again Button Clicked")
+        
+        self.remove_item(button)        
+        self.remove_item(self.button_end)
+        await interaction.response.edit_message(view=self)
+        
+        result = "Again"
+        
+        while self.running:
+            print("Crash Game Running")
+            new_number = random.randint(1, 8)
+            if new_number == self.random_number:
+                print("Crash Game Ended")
+                result = "Lose"
+                await self.update_embed(interaction, result)
+                break
+            else:
+                self.count += 1
+                print("Crash Game + 1")
+                result = "InProgress"
+                await self.update_embed(interaction, result)
+                print("Sleeping")
+                await asyncio.sleep(1.2)
+
 
 class crashCog(commands.Cog):
     def __init__(self, bot):
