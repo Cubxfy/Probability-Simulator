@@ -11,7 +11,10 @@ class Buttons(discord.ui.View):
         self.user_id = user_id
         self.guild_id = guild_id
         self.random_number = random.randint(1, 100)
-        self.count = 0      
+        self.count = 0
+        self.rounds = 0
+        self.roundswin = 0
+     
         
         #DB initialisation
         self.conn = sqlite3.connect("highlow.db")
@@ -40,7 +43,7 @@ class Buttons(discord.ui.View):
 
         embed = discord.Embed(
             title= f"{result}\nNew Number: {self.random_number}",
-            description=(f"Current Score: {self.count}\nHighest Score: {self.highest}"),
+            description=(f"Current Score: {self.count}\nHighest Score: {self.highest}\nSession Round Count: {self.rounds}\nSession WinRate: {self.roundswin/(self.rounds-self.roundswin)}"),
             color=color
         )
 
@@ -55,11 +58,13 @@ class Buttons(discord.ui.View):
         if new_number >= self.random_number:
             result = "Correct"
             self.count += 1
+            self.roundswin += 1
         else:
             result = "Incorrect"
             if self.count > self.highest:
                 self.highest = self.count
             self.count = 0
+        self.rounds += 1
         self.random_number = new_number
         await self.update_embed(interaction, result)
 
@@ -71,11 +76,13 @@ class Buttons(discord.ui.View):
         if new_number <= self.random_number:
             result = "Correct"
             self.count += 1
+            self.roundswin += 1
         else:
             result = "Incorrect"
             if self.count >= self.highest:
                 self.highest = self.count 
             self.count = 0
+        self.rounds += 1
         self.random_number = new_number
         await self.update_embed(interaction, result)    
     
