@@ -98,6 +98,7 @@ class Buttons(discord.ui.View):
                 await asyncio.sleep(1.2)
 
         if result == "Lose":
+            print("Checked result case")
             self.clear_items()
             self.add_item(self.button_again)
         
