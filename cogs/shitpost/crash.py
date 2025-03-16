@@ -74,12 +74,13 @@ class CrashView(discord.ui.View):
         self.embed.add_field(name="Crash",value=f"🚀 Multiplier: x0", inline=False)
         self.embed.description = f"Cost to play: **{self.bet}** points"
 
-        self.running = True
+        self.running = False
         self.multi = 0
         self.left = False
 
         self.random_number = random.randint(1, 50)
 
+        self.remove_item(self.button_leave)
 
     async def interaction_check(self, interaction: discord.Interaction) -> bool:
         # Only the original caller may interact.
@@ -92,10 +93,7 @@ class CrashView(discord.ui.View):
     async def button_gamestart(self, interaction: discord.Interaction, button: discord.ui.Button):
         #defer the message
         await interaction.response.defer()
-
-        self.remove_item(self.change_bet_button)
-        self.remove_item(self.close_button)
-        self.remove_item(self.button_gamestart)
+        self.running = True
 
         #check if playable
         guild_id = str(interaction.guild.id)
@@ -104,12 +102,27 @@ class CrashView(discord.ui.View):
         if current_points < self.bet:
             await interaction.followup.send("You do not have enough points to play.", ephemeral=True)
             return
+        
+        self.add_item(self.button_leave)
+
+        self.remove_item(self.rules_button)
+        self.remove_item(self.change_bet_button)
+        self.remove_item(self.close_button)
+        self.remove_item(self.button_gamestart)
 
         # Deduct the bet immediately.
         new_points = current_points - self.bet
         update_user_points(guild_id, user_id, new_points)
 
+        if not self.running:
+            self.running = True
+            self.add_item(self.button_leave)
+            self.remove_item(self.rules_button)
+            self.add_item(self.rules_button)
+        
         self.left = False
+
+        self.multi = 0
 
         while self.running:
             print("Crash Game Running") #debugging 
@@ -120,17 +133,15 @@ class CrashView(discord.ui.View):
                 self.add_item(self.button_gamestart)
                 self.add_item(self.change_bet_button)
                 self.add_item(self.close_button)
+                self.add_item(self.rules_button)
 
                 self.remove_item(self.button_leave)
-                self.remove_item(self.rules_button)
-
-                self.add_item(self.rules_button)
                 break
             else:
                 self.multi = round(self.multi + 0.1, 1) #rounding!
                 print("Crash Game + 1") #debugging
                 result_message = "InProgress"   
-                print("Sleeping") #debugging
+                print("Sleeping")
                 await asyncio.sleep(0.2)
             
             self.embed.set_footer(text=result_message)
@@ -144,29 +155,43 @@ class CrashView(discord.ui.View):
         
 
     #Leave Button
-    @discord.ui.button(label="Cash Out", style=discord.ButtonStyle.grey)
+    @discord.ui.button(label="Cash Out", style=discord.ButtonStyle.green)
     async def button_leave(self, interaction: discord.Interaction, button: discord.ui.Button):
         self.running = False
         self.left = True
         #defer the message
         await interaction.response.defer()
         print("Leave Button Clicked") #debugging
+
+        guild_id = str(interaction.guild.id)
+        user_id = str(interaction.user.id)
         
-        winnings = self.bet * self.multi
+        if self.multi >= 1:
+            winnings = self.bet * self.multi + self.bet
+        else:
+            winnings = self.bet * self.multi
         updated_points = get_user_data(guild_id, user_id)[0] + winnings
         update_user_points(guild_id, user_id, updated_points)
-        
+
+        print("wrote to database")
+
         result_message = "Left"
+        
+        self.add_item(self.button_gamestart)
+        self.add_item(self.change_bet_button)
+        self.add_item(self.close_button)
+
+        self.remove_item(self.button_leave)
+        self.remove_item(self.rules_button)
+        self.add_item(self.rules_button)
+        
 
         self.embed.set_footer(text=result_message)
         await self.message.edit(embed=self.embed, view=self)
 
         #button values below need to be changed
 
-        self.add_item(self.change_bet_button)
-        self.add_item(self.close_button)
-        self.add_item(self.button_gamestart)
-
+        
 
 
     # Button to change bet amount.
@@ -209,12 +234,12 @@ class crashCog(commands.Cog):
         self.bot = bot
 
     @app_commands.command(name="crash", description="get out before the rocket explodes")
-    async def slotmachine(self, interaction: discord.Interaction):
+    async def crash(self, interaction: discord.Interaction):
         view = CrashView(author=interaction.user, bet=DEFAULT_BET)
         embed = view.embed
-        # Send the initial message and store it in the view.
-        await interaction.response.send_message(embed=embed, view=view)
+        
         print("tried to send an embed")
+        await interaction.response.send_message(embed=embed, view=view)
         view.message = await interaction.original_response()
 
 async def setup(bot: commands.Bot):
